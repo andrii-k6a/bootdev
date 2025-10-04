@@ -10,6 +10,7 @@ const person = {
         country: "unknown"
     },
     grow() {
+        console.log(`Growing ${this}`);
         this.height++;
     },
     // arrow functions inherit the value of this keyword from their parents scope
@@ -35,6 +36,9 @@ console.log(`Education: ${educationDesc}`);
 console.log(`Height ${person.height}`);
 // mutate object's property
 person.grow();
+console.log(`Height ${person.height}`);
+const growFunc = person.grow; // loses 'this' binding
+growFunc();
 console.log(`Height ${person.height}`);
 
 // init property if does not exist
