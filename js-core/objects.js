@@ -12,6 +12,12 @@ const person = {
     grow() {
         this.height++;
     },
+    // arrow functions inherit the value of this keyword from their parents scope
+    // 'this' is determined when the arrow function is declared
+    // in this example, it refers to node.js module scope: {}
+    play: (instrument) => {
+        console.log(`Lady and gentelments, please welcome ${this?.firstName} with ${instrument} performance`);
+    },
 };
 
 console.log(`Introduction: ${person.intoduction()}`)
@@ -35,6 +41,7 @@ console.log(`Height ${person.height}`);
 if (!person.balance) {
     person.balance = 0;
 }
+console.log(`Balance ${person.balance}`);
 
 // dynamic keys
 const nameKey = "firstName";
@@ -43,5 +50,7 @@ const nameKey = "firstName";
     console.log(`Name ${person[name]}`);
 })(person, nameKey);
 
-console.log(person);
+const firstName = "John"; // does not impact
+console.log(this); // {} - node.js module scope
+person.play("guitar");
 
