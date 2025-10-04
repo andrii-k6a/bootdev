@@ -36,5 +36,12 @@ if (!person.balance) {
     person.balance = 0;
 }
 
+// dynamic keys
+const nameKey = "firstName";
+(function printName(person, name) {
+    console.log(`Name ${person.name}`);
+    console.log(`Name ${person[name]}`);
+})(person, nameKey);
+
 console.log(person);
 
