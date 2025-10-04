@@ -55,6 +55,6 @@ const nameKey = "firstName";
 })(person, nameKey);
 
 const firstName = "John"; // does not impact
-console.log(this); // {} - node.js module scope
+console.log(this); // {} - node.js module.exports scope
 person.play("guitar");
 
