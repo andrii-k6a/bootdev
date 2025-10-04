@@ -18,3 +18,18 @@ console.log(result);
     console.log("dude has been called");
     return text.length;
 })("dude");
+
+function addFunc(x, y) {
+    return x + y;
+}
+
+const addFuncAsVar = function(x, y) {
+    return x + y;
+}
+
+const addFuncAsArrow = (x, y) => x + y;
+
+console.log(addFunc(3, 7));
+console.log(addFuncAsVar(3, 7));
+console.log(addFuncAsArrow(3, 7));
+
