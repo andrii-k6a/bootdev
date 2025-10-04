@@ -33,3 +33,19 @@ console.log(addFunc(3, 7));
 console.log(addFuncAsVar(3, 7));
 console.log(addFuncAsArrow(3, 7));
 
+console.log("****")
+function doMeth(x, y) {
+    const sum = x + y;
+    const diff = x - y;
+    const product = x * y;
+    const quotient = x / y;
+    // return sum, diff, product, quotient; // it returns just the last one - quotient. The rest are just ingnored with no errors
+    return {
+        sum,
+        diff,
+        product,
+        quotient
+    };
+};
+console.log(doMeth(3, 5));
+
