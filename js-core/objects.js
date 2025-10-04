@@ -31,3 +31,10 @@ console.log(`Height ${person.height}`);
 person.grow();
 console.log(`Height ${person.height}`);
 
+// init property if does not exist
+if (!person.balance) {
+    person.balance = 0;
+}
+
+console.log(person);
+
