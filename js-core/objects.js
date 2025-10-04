@@ -5,18 +5,29 @@ const person = {
     },
     firstName: "Kurt",
     lastName: "Russel",
+    height: 179,
     location: {
         country: "unknown"
     },
+    grow() {
+        this.height++;
+    },
 };
 
+console.log(`Introduction: ${person.intoduction()}`)
+
+// unknow property is undefined
 const city = person.location.city;
-console.log(`Person's city is ${city}`);
+console.log(`City is ${city}`);
 
 // TypeError: Cannot read properties of undefined (reading 'description')
 // const education = person.education.description;
 const educationDesc = person.education?.description;
-console.log(`Person's education: ${educationDesc}`);
+console.log(`Education: ${educationDesc}`);
 
-console.log(`Introduction: ${person.intoduction()}`)
+
+console.log(`Height ${person.height}`);
+// mutate object's property
+person.grow();
+console.log(`Height ${person.height}`);
 
