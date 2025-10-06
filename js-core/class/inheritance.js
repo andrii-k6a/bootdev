@@ -45,3 +45,43 @@ ap.fly();
 ap.fly("Central Park");
 ap.fly(10, 3);
 
+class Content {
+    constructor(title) {
+        this.title = title;
+    }
+
+    format() {
+        return this.title.toUpperCase();
+    }
+
+    summary() {
+        return this.title;
+    }
+}
+
+class Article extends Content {
+    constructor(title, releaseDate) {
+        super(title); // Must call super constructor in derived class before accessing 'this' or returning from derived constructor, otherwise ReferenceError at runtime
+        this.title = title;
+        this.releaseDate = releaseDate;
+    }
+
+    format() {
+        return `${super.format()}, released: ${this.releaseDate}`;
+    }
+
+    summary() {
+        return "not implemented";
+    }
+
+    overview() {
+        // need super or this to call parent's func, just calling summary() results in ReferenceError
+        return super.summary(); // calling parent's impl
+    }
+}
+
+const a = new Article("Birds in heaven", "1968");
+console.log(a);
+console.log(a.format());
+console.log(a.overview());
+
