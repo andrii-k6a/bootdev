@@ -81,3 +81,35 @@ console.log(newF.__proto__);
 console.log(newF.__proto__ === f.prototype);
 console.log(newF.prototype); // undefined because it is an object - not a function
 
+console.log();
+
+function Person(name) {
+    this.name = name;
+
+    this.greetings = function(name) {
+        console.log(`Hello, ${this.name}`);
+    }
+}
+
+const p = {
+    location: "Mars"
+}
+
+const jule = new Person("Jule");
+console.log(jule);
+console.log(jule.location);
+
+// Object.assign(target, source) copies properties from source objects to target object
+Object.assign(Person.prototype, p);
+
+const pablo = new Person("Pablo");
+console.log(pablo); // it shows only object's own properties, not inherited props form prototype chain
+console.log(pablo.location);
+process.stdout.write("Pablo's prototype is: ");
+console.log(Object.getPrototypeOf(pablo));
+console.log(Object.getPrototypeOf(pablo) === p); // this is false because the props are copied, but they are different objects
+
+console.log(Person.prototype);
+console.log(Person.prototype.name); // undefynied because the property is available on instances itself, not its prototype
+console.log(Person.prototype.location);
+
