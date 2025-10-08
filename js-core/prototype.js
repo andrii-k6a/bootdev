@@ -64,3 +64,20 @@ console.log(greetings.country);
 greetings.hello();
 greetings.welcome();
 
+console.log()
+
+const obj = {};
+console.log(obj.prototype); // undefined - no such property on an object
+
+function f() {
+    console.log("f has been called...");
+}
+const newF = new f();
+
+// all functions have `prototype` property
+// When you call a function as a constructor, this property's value is set as the prototype of the newly constructed object (by convention, in the property named __proto__)
+console.log(f.prototype);
+console.log(newF.__proto__);
+console.log(newF.__proto__ === f.prototype);
+console.log(newF.prototype); // undefined because it is an object - not a function
+
