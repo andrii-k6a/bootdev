@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>Princess Mononoke Fan Club</title>
+  </head>
+
+  <body>
+    <h1 id="mainHeading">A Fan Club for Mononoke Enjoyers</h1>
+    <p>
+      Join us in       riveting discussion about the philosophical truths and untruths
+      revealed in the greatest metaphor of modern times.
+    </p>
+    <p>Every Tuesday at 7pm EST.</p>
+    <button id="joinButton">Join the Fun</button>
+
+    <script>
+        function onJoinClick() {
+            document.getElementById("mainHeading").textContent = "Welcome to the Club!";
+            const paragraphs = document.getElementsByTagName("p");
+            for (const p of paragraphs) {
+                p.style.color = "red";
+            }
+        }
+        
+        document.getElementById("joinButton").addEventListener("click", onJoinClick);
+    </script>
+
+  </body>
+</html>
