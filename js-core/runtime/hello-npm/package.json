@@ -1,0 +1,11 @@
+{
+    "name": "hello-npm",
+    "version": "1.0.0",
+    "description": "hello npm demo package",
+    "main": "index.js",
+    "scripts": {
+        "start": "node main.js"
+    },
+    "author": "",
+    "license": "ISC"
+}
