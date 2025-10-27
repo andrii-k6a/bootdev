@@ -1,0 +1,15 @@
+{
+    "name": "ts-core",
+    "version": "1.0.0",
+    "description": "demo project to explore typescript capabilites",
+    "license": "ISC",
+    "author": "Kook",
+    "type": "module",
+    "main": "main.js",
+    "scripts": {
+        "start": "node main.js"
+    },
+    "devDependencies": {
+        "typescript": "^5.9.3"
+    }
+}
