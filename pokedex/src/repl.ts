@@ -1,10 +1,13 @@
-import { createInterface } from 'node:readline';
+import { createInterface } from "node:readline";
+import { getCommands } from "./registry.js";
 
 const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: "Pokedex > ",
 });
+
+const commands = getCommands();
 
 export function cleanInput(input: string): string[] {
     return input.toLowerCase()
@@ -21,7 +24,15 @@ export function startREPL() {
             rl.prompt();
             return;
         }
-        console.log(`Your command was: ${input[0]}`);
+
+        const command = commands[input[0]];
+        if (!command) {
+            console.log("Unknown command");
+            rl.prompt();
+            return;
+        }
+
+        command.callback(commands);
         rl.prompt();
     });
 };
