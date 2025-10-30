@@ -12,7 +12,7 @@ export function startREPL(state: State) {
     const commands = state.commands;
 
     rl.prompt();
-    rl.on("line", line => {
+    rl.on("line", async line => {
         const input = cleanInput(line);
         if (input.length === 0) {
             rl.prompt();
@@ -26,7 +26,16 @@ export function startREPL(state: State) {
             return;
         }
 
-        command.callback(state);
+        try {
+            await command.callback(state);
+        } catch (err) {
+            if (err instanceof Error) {
+                console.log(`Command execution faile: ${err.message}`);
+            } else {
+                console.log(`Command execution faile: ${err}`);
+            }
+        }
+
         rl.prompt();
     });
 };
