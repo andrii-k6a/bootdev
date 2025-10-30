@@ -1,7 +1,9 @@
 import { describe } from "node:test";
-import type { CLICommand } from "./registry";
+import type { State } from "./state.ts";
 
-export function commandHelp(commands: Record<string, CLICommand>) {
+export function commandHelp(state: State) {
+    const commands = state.commands;
+
     console.log("Welcome to the Pokedex!");
     console.log("Usage:");
     for (const commandKey in commands) {

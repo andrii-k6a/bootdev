@@ -1,13 +1,4 @@
-import { createInterface } from "node:readline";
-import { getCommands } from "./registry.js";
-
-const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: "Pokedex > ",
-});
-
-const commands = getCommands();
+import type { State } from "./state.ts";
 
 export function cleanInput(input: string): string[] {
     return input.toLowerCase()
@@ -16,7 +7,10 @@ export function cleanInput(input: string): string[] {
         .filter(i => i.length > 0);
 };
 
-export function startREPL() {
+export function startREPL(state: State) {
+    const rl = state.interface;
+    const commands = state.commands;
+
     rl.prompt();
     rl.on("line", line => {
         const input = cleanInput(line);
@@ -32,7 +26,7 @@ export function startREPL() {
             return;
         }
 
-        command.callback(commands);
+        command.callback(state);
         rl.prompt();
     });
 };
