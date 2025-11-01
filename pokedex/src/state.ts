@@ -1,3 +1,4 @@
+import { commandExplore } from "./command_explore.js";
 import { commandMapForward, commandMapBackward } from "./command_map.js";
 import { commandHelp } from "./command_help.js"
 import { commandExit } from "./command_exit.js";
@@ -17,11 +18,15 @@ export type State = {
 export type CLICommand = {
     name: string;
     description: string;
-    callback: (state: State) => Promise<void>;
+    callback: (state: State, ...args: string[]) => Promise<void>;
 };
 
 export function initState(): State {
     const CACHE_EXPIRATION_TIMEOUT = 10000;
+    const pokeClient = new PokeClient(
+        new Cache(CACHE_EXPIRATION_TIMEOUT),
+        new Cache(CACHE_EXPIRATION_TIMEOUT)
+    );
     return {
         interface: createInterface({
             input: process.stdin,
@@ -29,12 +34,17 @@ export function initState(): State {
             prompt: "Pokedex > ",
         }),
         commands: getCommands(),
-        pokeClient: new PokeClient(new Cache(CACHE_EXPIRATION_TIMEOUT)),
+        pokeClient: pokeClient,
     };
 }
 
 function getCommands(): Record<string, CLICommand> {
     return {
+        explore: {
+            name: "explore",
+            description: "View a list of all the Pokemon in a given area.",
+            callback: commandExplore
+        },
         map: {
             name: "map",
             description: "It displays the names of 20 location areas in the Pokemon world. Each subsequent call to map should display the next 20 locations, and so on.",

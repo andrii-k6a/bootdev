@@ -2,10 +2,12 @@ import { Cache } from "./poke_cache";
 
 export class PokeClient {
     #baseUrl = "https://pokeapi.co/api/v2";
-    #cache: Cache<Locations>;
+    #locationsCache: Cache<Locations>;
+    #locationCache: Cache<Location>;
 
-    constructor(cache: Cache<Locations>) {
-        this.#cache = cache;
+    constructor(locationsCache: Cache<Locations>, locationCache: Cache<Location>) {
+        this.#locationsCache = locationsCache;
+        this.#locationCache = locationCache;
     }
 
     async fetchLocations(url: string | undefined): Promise<Locations> {
@@ -13,14 +15,37 @@ export class PokeClient {
             url = `${this.#baseUrl}/location-area`;
         }
 
-        const cache = this.#cache.get(url);
+        const cache = this.#locationsCache.get(url);
         if (cache) {
             return cache;
         }
 
         const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to get locations: ${response.status} ${response.statusText}`);
+        }
         const payload = await response.json();
-        this.#cache.add(url, payload);
+
+        this.#locationsCache.add(url, payload);
+
+        return payload;
+    }
+
+    async fetchLocation(locationName: string): Promise<Location> {
+        const cache = this.#locationCache.get(locationName);
+        if (cache) {
+            return cache;
+        }
+
+        const url = `${this.#baseUrl}/location-area/${locationName}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to get location: ${response.status} ${response.statusText}`);
+        }
+        const payload = await response.json();
+
+        this.#locationCache.add(url, payload);
+
         return payload;
     }
 }
@@ -32,6 +57,14 @@ export type Locations = {
     results: {
         name: string;
         url: string;
+    }[];
+}
+
+export type Location = {
+    pokemon_encounters: {
+        pokemon: {
+            name: string;
+        }
     }[];
 }
 

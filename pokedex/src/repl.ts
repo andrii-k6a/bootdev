@@ -19,7 +19,10 @@ export function startREPL(state: State) {
             return;
         }
 
-        const command = commands[input[0]];
+        const commandName = input[0];
+        const args = input.slice(1);
+
+        const command = commands[commandName];
         if (!command) {
             console.log("Unknown command");
             rl.prompt();
@@ -27,12 +30,12 @@ export function startREPL(state: State) {
         }
 
         try {
-            await command.callback(state);
+            await command.callback(state, ...args);
         } catch (err) {
             if (err instanceof Error) {
-                console.log(`Command execution faile: ${err.message}`);
+                console.log(`Command execution failed: ${err.message}`);
             } else {
-                console.log(`Command execution faile: ${err}`);
+                console.log(`Command execution failed: ${err}`);
             }
         }
 
