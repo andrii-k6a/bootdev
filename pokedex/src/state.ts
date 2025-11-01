@@ -1,15 +1,17 @@
+import { commandCatch } from "./command_catch.js";
 import { commandExplore } from "./command_explore.js";
 import { commandMapForward, commandMapBackward } from "./command_map.js";
 import { commandHelp } from "./command_help.js"
 import { commandExit } from "./command_exit.js";
 import { createInterface } from "node:readline";
-import { PokeClient } from "./poke_client.js";
+import { PokeClient, Pokemon } from "./poke_client.js";
 import { Cache } from "./poke_cache.js";
 import type { Interface } from "node:readline";
 
 export type State = {
     interface: Interface;
     commands: Record<string, CLICommand>;
+    pokedex: Record<string, Pokemon>;
     pokeClient: PokeClient;
     nextLocationsUrl?: string;
     prevLocationsUrl?: string;
@@ -25,7 +27,8 @@ export function initState(): State {
     const CACHE_EXPIRATION_TIMEOUT = 10000;
     const pokeClient = new PokeClient(
         new Cache(CACHE_EXPIRATION_TIMEOUT),
-        new Cache(CACHE_EXPIRATION_TIMEOUT)
+        new Cache(CACHE_EXPIRATION_TIMEOUT),
+        new Cache(CACHE_EXPIRATION_TIMEOUT),
     );
     return {
         interface: createInterface({
@@ -34,12 +37,18 @@ export function initState(): State {
             prompt: "Pokedex > ",
         }),
         commands: getCommands(),
+        pokedex: {},
         pokeClient: pokeClient,
     };
 }
 
 function getCommands(): Record<string, CLICommand> {
     return {
+        catch: {
+            name: "catch",
+            description: "Attempt to catch a pokemon.",
+            callback: commandCatch
+        },
         explore: {
             name: "explore",
             description: "View a list of all the Pokemon in a given area.",
