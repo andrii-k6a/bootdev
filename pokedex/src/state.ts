@@ -3,6 +3,7 @@ import { commandHelp } from "./command_help.js"
 import { commandExit } from "./command_exit.js";
 import { createInterface } from "node:readline";
 import { PokeClient } from "./poke_client.js";
+import { Cache } from "./poke_cache.js";
 import type { Interface } from "node:readline";
 
 export type State = {
@@ -20,6 +21,7 @@ export type CLICommand = {
 };
 
 export function initState(): State {
+    const CACHE_EXPIRATION_TIMEOUT = 10000;
     return {
         interface: createInterface({
             input: process.stdin,
@@ -27,7 +29,7 @@ export function initState(): State {
             prompt: "Pokedex > ",
         }),
         commands: getCommands(),
-        pokeClient: new PokeClient(),
+        pokeClient: new PokeClient(new Cache(CACHE_EXPIRATION_TIMEOUT)),
     };
 }
 
