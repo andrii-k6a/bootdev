@@ -8,6 +8,7 @@ import { PokeClient, Pokemon } from "./poke_client.js";
 import { Cache } from "./poke_cache.js";
 import type { Interface } from "node:readline";
 import { commandInspect } from "./command_inspect.js";
+import { commandPokedex } from "./command_pokedex.js";
 
 export type State = {
     interface: Interface;
@@ -69,6 +70,11 @@ function getCommands(): Record<string, CLICommand> {
             name: "mapb",
             description: "It's similar to the map command, however, instead of displaying the next 20 locations, it displays the previous 20 locations. It's a way to go back.",
             callback: commandMapBackward
+        },
+        pokedex: {
+            name: "pokedex",
+            description: "Prints a list of all pokemons that were caught.",
+            callback: commandPokedex
         },
         help: {
             name: "help",
