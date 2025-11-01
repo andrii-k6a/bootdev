@@ -7,6 +7,7 @@ import { createInterface } from "node:readline";
 import { PokeClient, Pokemon } from "./poke_client.js";
 import { Cache } from "./poke_cache.js";
 import type { Interface } from "node:readline";
+import { commandInspect } from "./command_inspect.js";
 
 export type State = {
     interface: Interface;
@@ -53,6 +54,11 @@ function getCommands(): Record<string, CLICommand> {
             name: "explore",
             description: "View a list of all the Pokemon in a given area.",
             callback: commandExplore
+        },
+        inspect: {
+            name: "inspect",
+            description: "View details about a caught pokemon",
+            callback: commandInspect,
         },
         map: {
             name: "map",
