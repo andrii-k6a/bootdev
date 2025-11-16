@@ -37,11 +37,11 @@ function getConfigFilePath(): string {
 
 function validateConfig(rawConfig: any): Config {
     if (!rawConfig.db_url || typeof rawConfig.db_url !== "string") {
-        throw new Error("Missing require property in config: db_url");
+        throw new Error("Missing required property in config: db_url");
     }
 
     if (!rawConfig.current_user_name || typeof rawConfig.current_user_name !== "string") {
-        throw new Error("Missing require property in config: current_user_name");
+        throw new Error("Missing required property in config: current_user_name");
     }
 
     return {
