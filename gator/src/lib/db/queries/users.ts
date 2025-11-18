@@ -22,3 +22,7 @@ export async function findUsers(name: string) {
         .where(eq(users.name, name));
 }
 
+export async function deleteAllUsers() {
+    await db.delete(users);
+}
+
