@@ -16,6 +16,10 @@ export async function findFirstUser(name: string) {
     return results[0];
 }
 
+export async function findAllUsers() {
+    return await db.select().from(users);
+}
+
 export async function findUsers(name: string) {
     return await db.select()
         .from(users)

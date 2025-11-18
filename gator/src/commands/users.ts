@@ -1,5 +1,5 @@
-import { setUser } from "../config";
-import { createUser, findFirstUser } from "../lib/db/queries/users";
+import { readConfig, setUser } from "../config";
+import { createUser, findAllUsers, findFirstUser } from "../lib/db/queries/users";
 
 export async function handleLogin(cmdName: string, username: string) {
     if (!username) {
@@ -34,5 +34,17 @@ export async function handleRegister(cmdName: string, username: string) {
     setUser(newUser.name);
 
     console.log(`User has been registered`, newUser);
+}
+
+export async function handleListUsers(cmdName: string) {
+    const users = await findAllUsers();
+    const currentUser = readConfig().currentUserName;
+    for (const user of users) {
+        if (user.name === currentUser) {
+            console.log(`* ${user.name} (current)`);
+        } else {
+            console.log(`* ${user.name}`);
+        }
+    }
 }
 
