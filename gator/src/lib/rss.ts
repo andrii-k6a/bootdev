@@ -45,7 +45,7 @@ function validateRSS(parsed: any): RSSFeed {
         throw new Error("Missing required data in RSS");
     }
 
-    // If RSS contains a single item, it might not be represented as a list
+    // If RSS contains a single item, it might not be wrapped into list
     const items: any[] = Array.isArray(channel.item) ? channel.item : [channel.item];
 
     const rssItems: RSSItem[] = [];
