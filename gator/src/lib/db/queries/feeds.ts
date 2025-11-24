@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "..";
 import { feeds } from "../schema";
 
@@ -18,5 +19,12 @@ export async function findAllFeedsWithUsers() {
             user: true,
         },
     });
+}
+
+export async function findFeedByUrl(url: string) {
+    const results = await db.select()
+        .from(feeds)
+        .where(eq(feeds.url, url));
+    return results[0];
 }
 

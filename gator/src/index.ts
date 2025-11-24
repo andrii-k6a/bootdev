@@ -8,6 +8,10 @@ import {
 import { handleReset } from "./commands/reset";
 import { handleAgg } from "./commands/agg";
 import { handleAddFeed, handleListFeeds } from "./commands/feeds";
+import {
+    handleFollow,
+    handleListFeedFollows,
+} from "./commands/feed-follows";
 
 async function main() {
     const input = process.argv.slice(2);
@@ -29,6 +33,8 @@ async function main() {
     registerCommand(registry, "agg", handleAgg);
     registerCommand(registry, "addfeed", handleAddFeed);
     registerCommand(registry, "feeds", handleListFeeds);
+    registerCommand(registry, "follow", handleFollow);
+    registerCommand(registry, "following", handleListFeedFollows);
 
     try {
         await runCommand(registry, cmdName, ...args);
