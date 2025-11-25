@@ -15,6 +15,7 @@ import { handleAddFeed, handleListFeeds } from "./commands/feeds";
 import {
     handleFollow,
     handleListFeedFollows,
+    handleUnfollow,
 } from "./commands/feed-follows";
 
 async function main() {
@@ -39,6 +40,7 @@ async function main() {
     registerCommand(registry, "feeds", handleListFeeds);
     registerCommand(registry, "follow", middlewareLoggedIn(handleFollow));
     registerCommand(registry, "following", middlewareLoggedIn(handleListFeedFollows));
+    registerCommand(registry, "unfollow", middlewareLoggedIn(handleUnfollow));
 
     try {
         await runCommand(registry, cmdName, ...args);
