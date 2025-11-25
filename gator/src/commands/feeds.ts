@@ -1,10 +1,8 @@
-import { readConfig } from "../config";
 import { createFeed, findAllFeedsWithUsers } from "../lib/db/queries/feeds";
 import { createFeedFollow } from "../lib/db/queries/feed-follows";
-import { findFirstUser } from "../lib/db/queries/users";
 import type { User, Feed } from "../lib/db/schema";
 
-export async function handleAddFeed(cmdName: string, ...args: string[]) {
+export async function handleAddFeed(cmdName: string, user: User, ...args: string[]) {
     const feedName = args[0];
     if (!feedName) {
         throw new Error("Missing feed name");
@@ -15,19 +13,12 @@ export async function handleAddFeed(cmdName: string, ...args: string[]) {
         throw new Error("Missing feed url");
     }
 
-    const currentUser = readConfig().currentUserName;
-    const user = await findFirstUser(currentUser);
-
-    if (!user) {
-        throw new Error(`User not found: ${currentUser}`);
-    }
-
     const newFeed = await createFeed(feedName, url, user.id);
     if (!newFeed) {
         throw new Error("Failed to create new feed");
     }
 
-    const newFeedFolllow = await createFeedFollow(user.id, newFeed.id);
+    const newFeedFollow = await createFeedFollow(user.id, newFeed.id);
 
     console.log("Feed has been added");
 
