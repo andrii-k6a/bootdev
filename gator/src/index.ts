@@ -12,6 +12,7 @@ import {
 import { handleReset } from "./commands/reset";
 import { handleAgg } from "./commands/agg";
 import { handleAddFeed, handleListFeeds } from "./commands/feeds";
+import { handleBrowse } from "./commands/posts";
 import {
     handleFollow,
     handleListFeedFollows,
@@ -41,6 +42,7 @@ async function main() {
     registerCommand(registry, "follow", middlewareLoggedIn(handleFollow));
     registerCommand(registry, "following", middlewareLoggedIn(handleListFeedFollows));
     registerCommand(registry, "unfollow", middlewareLoggedIn(handleUnfollow));
+    registerCommand(registry, "browse", middlewareLoggedIn(handleBrowse));
 
     try {
         await runCommand(registry, cmdName, ...args);

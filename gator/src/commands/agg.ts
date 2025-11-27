@@ -3,6 +3,7 @@ import {
     findNextFeedToFetch,
     markFeedFetched
 } from "../lib/db/queries/feeds";
+import { createPost } from "../lib/db/queries/posts";
 
 export async function handleAgg(cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
@@ -81,7 +82,15 @@ async function scrapeFeeds() {
     const rss = await fetchFeed(feed.url);
 
     for (let i of rss.channel.item) {
-        console.log(` * ${i.title}`);
+        const post = {
+            title: i.title,
+            url: i.link,
+            description: i.description,
+            publishedAt: new Date(i.pubDate),
+            feedId: feed.id,
+        };
+        await createPost(post);
+        console.log(`Post has been handled: ${post.title}`);
     }
 }
 
