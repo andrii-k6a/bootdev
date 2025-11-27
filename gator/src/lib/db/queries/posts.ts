@@ -3,12 +3,13 @@ import { db } from "../index";
 import { feedFollows, feeds, posts } from "../schema";
 import type { NewPost } from "../schema";
 
-export async function createPost(newPost: Omit<NewPost, 'id' | 'createdAt' | 'updatedAt'>) {
-    const [result] = await db.insert(posts)
-        .values(newPost)
+export async function createPosts(newPosts: Omit<NewPost, 'id' | 'createdAt' | 'updatedAt'>[]) {
+    if (newPosts.length === 0) return [];
+
+    return await db.insert(posts)
+        .values(newPosts)
         .onConflictDoNothing() // do not throw error if post already exists
         .returning();
-    return result;
 }
 
 export async function findPostsForUser(userId: string, limit = 20) {
