@@ -12,8 +12,8 @@ app.use(middlewareLogResponse);
 app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 
 app.get("/api/healthz", handleReadiness);
-app.get("/api/metrics", handleFileserverHits);
-app.get("/api/reset", handleResetMetrics);
+app.get("/admin/metrics", handleFileserverHits);
+app.get("/admin/reset", handleResetMetrics);
 
 const PORT = 8080;
 app.listen(PORT, () => {

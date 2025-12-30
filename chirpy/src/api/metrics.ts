@@ -2,8 +2,19 @@ import type { Request, Response } from "express";
 import { config } from "../config.js";
 
 export async function handleFileserverHits(_: Request, response: Response) {
-    response.set({ "Content-Type": "text/plain; charset=utf-8" });
-    response.status(200).send(`Hits: ${config.fileserverHits}`);
+    response.set({ "Content-Type": "text/html; charset=utf-8" });
+    response.status(200).send(adminMetricsTemplate());
+}
+
+function adminMetricsTemplate(): string {
+    return `
+<html>
+<body>
+    <h1>Welcome, Chirpy Admin</h1>
+    <p>Chirpy has been visited ${config.fileserverHits} times!</p>
+</body>
+</html>
+`.trim();
 }
 
 export async function handleResetMetrics(_: Request, response: Response) {
