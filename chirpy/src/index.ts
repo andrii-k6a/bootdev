@@ -13,7 +13,7 @@ app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 
 app.get("/api/healthz", handleReadiness);
 app.get("/admin/metrics", handleFileserverHits);
-app.get("/admin/reset", handleResetMetrics);
+app.post("/admin/reset", handleResetMetrics);
 
 const PORT = 8080;
 app.listen(PORT, () => {
