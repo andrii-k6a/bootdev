@@ -5,6 +5,7 @@ import {
     middlewareMetricsInc,
     middlewareLogResponse
 } from "./api/middleware.js"
+import { handleChirpsValidation } from "./api/validator.js";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 app.get("/api/healthz", handleReadiness);
 app.get("/admin/metrics", handleFileserverHits);
 app.post("/admin/reset", handleResetMetrics);
+app.post("/api/validate_chirp", handleChirpsValidation);
 
 const PORT = 8080;
 app.listen(PORT, () => {
