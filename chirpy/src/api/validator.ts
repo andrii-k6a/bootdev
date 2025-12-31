@@ -5,6 +5,7 @@ type Chirp = {
 }
 
 const MAX_CHIRP_LENGTH = 140;
+const BAD_WORDS = ["kerfuffle", "fornax", "sharbert"];
 
 export async function handleChirpsValidation(req: Request, resp: Response) {
     let chirp: Chirp = req.body;
@@ -19,6 +20,15 @@ export async function handleChirpsValidation(req: Request, resp: Response) {
         return;
     }
 
-    resp.status(200).json({ valid: true });
+    const cleanedBody = chirp.body.split(" ")
+        .map(w => {
+            if (BAD_WORDS.includes(w.toLowerCase())) {
+                return "****";
+            }
+            return w;
+        })
+        .join(" ");
+
+    resp.status(200).json({ cleanedBody });
 }
 
