@@ -9,13 +9,14 @@ import { handleChirpsValidation } from "./api/validator.js";
 
 const app = express();
 
+app.use(express.json());
 app.use(middlewareLogResponse);
 app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 
 app.get("/api/healthz", handleReadiness);
+app.post("/api/validate_chirp", handleChirpsValidation);
 app.get("/admin/metrics", handleFileserverHits);
 app.post("/admin/reset", handleResetMetrics);
-app.post("/api/validate_chirp", handleChirpsValidation);
 
 const PORT = 8080;
 app.listen(PORT, () => {

@@ -1,13 +1,5 @@
 import type { Request, Response } from "express";
 
-type Err = {
-    error: string;
-}
-
-type Ok = {
-    valid: true;
-}
-
 type Chirp = {
     body: string;
 }
@@ -15,29 +7,18 @@ type Chirp = {
 const MAX_CHIRP_LENGTH = 140;
 
 export async function handleChirpsValidation(req: Request, resp: Response) {
-    let payload = "";
+    let chirp: Chirp = req.body;
 
-    req.on("data", chunk => {
-        payload += chunk;
-    })
+    if (!chirp || typeof chirp.body !== 'string') {
+        resp.status(400).json({ error: "Invalid body" });
+        return;
+    }
 
-    req.on("end", () => {
-        let chirp: Chirp;
-        try {
-            chirp = JSON.parse(payload);
-            if (chirp.body.length > MAX_CHIRP_LENGTH) {
-                respond(resp, 400, { error: "Chirp is too long" });
-            } else {
-                respond(resp, 200, { valid: true })
-            }
-        } catch (err) {
-            respond(resp, 400, { error: "Something went wrong" });
-        }
-    })
-}
+    if (chirp.body.length > MAX_CHIRP_LENGTH) {
+        resp.status(400).json({ error: "Chirp is too long" });
+        return;
+    }
 
-function respond(resp: Response, code: number, jsonPayload: Err | Ok) {
-    resp.header("Content-Type", "application/json");
-    resp.status(code).send(JSON.stringify(jsonPayload));
+    resp.status(200).json({ valid: true });
 }
 
