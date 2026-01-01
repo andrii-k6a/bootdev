@@ -11,13 +11,15 @@ export async function handleChirpsValidation(req: Request, resp: Response) {
     let chirp: Chirp = req.body;
 
     if (!chirp || typeof chirp.body !== 'string') {
-        resp.status(400).json({ error: "Invalid body" });
+        resp.status(400).json({ error: "Invalid body! Fix it and try again!" });
         return;
     }
 
     if (chirp.body.length > MAX_CHIRP_LENGTH) {
-        resp.status(400).json({ error: "Chirp is too long" });
-        return;
+        // just to test error handler middleware works
+        throw new Error("Chirp exceeded the max length");
+        // resp.status(400).json({ error: "Chirp is too long" });
+        // return;
     }
 
     const cleanedBody = chirp.body.split(" ")

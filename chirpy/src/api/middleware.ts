@@ -15,3 +15,9 @@ export function middlewareMetricsInc(request: Request, response: Response, next:
     next();
 }
 
+export function middlewareErrorHandler(err: Error, request: Request, response: Response, next: NextFunction) {
+    console.log(`Oops! Something went wrong! Error: ${err.message}`);
+    response.status(500).json({ error: "Pooped!" });
+    next(err);
+}
+
