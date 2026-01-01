@@ -1,4 +1,5 @@
 import type { Request, Response } from "express";
+import { BadRequestError } from "./errors.js";
 
 type Chirp = {
     body: string;
@@ -11,15 +12,11 @@ export async function handleChirpsValidation(req: Request, resp: Response) {
     let chirp: Chirp = req.body;
 
     if (!chirp || typeof chirp.body !== 'string') {
-        resp.status(400).json({ error: "Invalid body! Fix it and try again!" });
-        return;
+        throw new BadRequestError("Invalid body! Fix it and try again!");
     }
 
     if (chirp.body.length > MAX_CHIRP_LENGTH) {
-        // just to test error handler middleware works
-        throw new Error("Chirp exceeded the max length");
-        // resp.status(400).json({ error: "Chirp is too long" });
-        // return;
+        throw new BadRequestError(`Chirp is too long. Max length is ${MAX_CHIRP_LENGTH}`);
     }
 
     const cleanedBody = chirp.body.split(" ")
