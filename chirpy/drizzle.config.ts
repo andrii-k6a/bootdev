@@ -6,7 +6,7 @@ export default defineConfig({
     schema: "./src/lib/db/schema.ts",
     out: "./src/lib/db/generated",
     dbCredentials: {
-        url: config.dbUrl
+        url: config.db.url
     }
 });
 

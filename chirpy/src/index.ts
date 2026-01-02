@@ -1,5 +1,10 @@
 import type { Request, Response, NextFunction } from "express";
+
 import express from "express";
+import postgres from "postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
+
 import { handleResetMetrics, handleFileserverHits } from "./api/metrics.js";
 import { handleReadiness } from "./api/health.js";
 import {
@@ -8,6 +13,7 @@ import {
     middlewareErrorHandler
 } from "./api/middleware.js"
 import { handleChirpsValidation } from "./api/validator.js";
+import { config } from "./config.js";
 
 const asyncRouteErrorHandler = (handler: Function) => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -15,6 +21,10 @@ const asyncRouteErrorHandler = (handler: Function) => {
         Promise.resolve(handler(req, res, next)).catch(next);
     };
 };
+
+const migrationClient = postgres(config.db.url, { max: 1 });
+await migrate(drizzle(migrationClient), config.db.migrationConfig);
+await migrationClient.end();
 
 const app = express();
 

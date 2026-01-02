@@ -1,8 +1,19 @@
 process.loadEnvFile();
 
+import type { MigrationConfig } from "drizzle-orm/migrator";
+
 export type APIConfig = {
-    dbUrl: string,
     fileserverHits: number
+}
+
+export type DBConfig = {
+    url: string;
+    migrationConfig: MigrationConfig
+}
+
+export type Config = {
+    api: APIConfig;
+    db: DBConfig;
 }
 
 function envOrThrow(key: string): string {
@@ -13,8 +24,18 @@ function envOrThrow(key: string): string {
     throw new Error(`Missing environment variable ${key}`);
 }
 
-export const config: APIConfig = {
-    dbUrl: envOrThrow("DB_URL"),
-    fileserverHits: 0
+const migrationConfig: MigrationConfig = {
+    migrationsFolder: "./src/lib/db/generated"
+}
+
+export const config: Config = {
+    api: {
+        fileserverHits: 0
+
+    },
+    db: {
+        url: envOrThrow("DB_URL"),
+        migrationConfig
+    }
 }
 

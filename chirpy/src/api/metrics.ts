@@ -11,14 +11,14 @@ function adminMetricsTemplate(): string {
 <html>
 <body>
     <h1>Welcome, Chirpy Admin</h1>
-    <p>Chirpy has been visited ${config.fileserverHits} times!</p>
+    <p>Chirpy has been visited ${config.api.fileserverHits} times!</p>
 </body>
 </html>
 `.trim();
 }
 
 export async function handleResetMetrics(_: Request, response: Response) {
-    config.fileserverHits = 0;
+    config.api.fileserverHits = 0;
     response.status(200).send("Hits reset to 0");
 }
 
