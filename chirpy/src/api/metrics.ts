@@ -17,8 +17,3 @@ function adminMetricsTemplate(): string {
 `.trim();
 }
 
-export async function handleResetMetrics(_: Request, response: Response) {
-    config.api.fileserverHits = 0;
-    response.status(200).send("Hits reset to 0");
-}
-

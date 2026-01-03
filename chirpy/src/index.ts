@@ -5,7 +5,9 @@ import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 
-import { handleResetMetrics, handleFileserverHits } from "./api/metrics.js";
+import { handleNewUser } from "./api/users.js";
+import { handleReset } from "./api/reset.js";
+import { handleFileserverHits } from "./api/metrics.js";
 import { handleReadiness } from "./api/health.js";
 import {
     middlewareMetricsInc,
@@ -34,8 +36,9 @@ app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 
 app.get("/api/healthz", asyncRouteErrorHandler(handleReadiness));
 app.post("/api/validate_chirp", asyncRouteErrorHandler(handleChirpsValidation));
+app.post("/api/users", asyncRouteErrorHandler(handleNewUser));
 app.get("/admin/metrics", asyncRouteErrorHandler(handleFileserverHits));
-app.post("/admin/reset", asyncRouteErrorHandler(handleResetMetrics));
+app.post("/admin/reset", asyncRouteErrorHandler(handleReset));
 
 // Error handling middleware needs to be defined last, after other app.use() and routes.
 app.use(middlewareErrorHandler);
