@@ -8,6 +8,13 @@
       "when": 1767297961369,
       "tag": "0000_grey_ultragirl",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1767543062177,
+      "tag": "0001_grey_mauler",
+      "breakpoints": true
     }
   ]
 }
