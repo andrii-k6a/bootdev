@@ -1,8 +1,9 @@
 import type { Request, Response } from "express";
+import type { Chirp } from "../lib/db/schema.js";
 import { BadRequestError } from "./errors.js";
-import { saveNewChirp } from "../lib/db/queries/chirps.js";
+import { findChirps, saveNewChirp } from "../lib/db/queries/chirps.js";
 
-type Chirp = {
+type Parameters = {
     body: string;
     userId: string;
 }
@@ -11,7 +12,7 @@ const MAX_CHIRP_LENGTH = 140;
 const BAD_WORDS = ["kerfuffle", "fornax", "sharbert"];
 
 function validate(req: Request) {
-    let chirp: Chirp = req.body;
+    let chirp: Parameters = req.body;
 
     if (!chirp || typeof chirp.body !== "string" || typeof chirp.userId !== "string" || chirp.userId.length !== 36) {
         throw new BadRequestError("Invalid body! Fix it and try again!");
@@ -36,6 +37,16 @@ function validate(req: Request) {
     };
 }
 
+function mapChirp(chirp: Chirp) {
+    return {
+        id: chirp.id,
+        createdAt: chirp.createdAt,
+        updatedAt: chirp.updatedAt,
+        body: chirp.body,
+        userId: chirp.userId
+    };
+}
+
 export async function handleNewChirp(req: Request, resp: Response) {
     const input = validate(req);
 
@@ -44,12 +55,11 @@ export async function handleNewChirp(req: Request, resp: Response) {
         userId: input.userId
     });
 
-    resp.status(201).json({
-        id: savedChirp.id,
-        createdAt: savedChirp.createdAt,
-        updatedAt: savedChirp.updatedAt,
-        body: savedChirp.body,
-        userId: savedChirp.userId
-    });
+    resp.status(201).json(mapChirp(savedChirp));
+}
+
+export async function handleFindChirps(req: Request, resp: Response) {
+    const chirps = (await findChirps()).map(c => mapChirp(c));
+    resp.status(200).json(chirps);
 }
 
