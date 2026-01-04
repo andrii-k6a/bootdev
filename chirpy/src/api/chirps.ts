@@ -1,7 +1,14 @@
 import type { Request, Response } from "express";
 import type { Chirp } from "../lib/db/schema.js";
-import { BadRequestError } from "./errors.js";
-import { findChirps, saveNewChirp } from "../lib/db/queries/chirps.js";
+import {
+    BadRequestError,
+    NotFoundError
+} from "./errors.js";
+import {
+    findChirpById,
+    findChirps,
+    saveNewChirp
+} from "../lib/db/queries/chirps.js";
 
 type Parameters = {
     body: string;
@@ -61,5 +68,17 @@ export async function handleNewChirp(req: Request, resp: Response) {
 export async function handleFindChirps(req: Request, resp: Response) {
     const chirps = (await findChirps()).map(c => mapChirp(c));
     resp.status(200).json(chirps);
+}
+
+export async function handleFindChirp(req: Request, resp: Response) {
+    const { chirpId } = req.params;
+
+    const chirp = await findChirpById(chirpId);
+
+    if (!chirp) {
+        throw new NotFoundError(`Chirp not found by id ${chirpId}`);
+    }
+
+    resp.status(200).json(mapChirp(chirp));
 }
 

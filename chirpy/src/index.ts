@@ -6,7 +6,11 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 
 import { handleNewUser } from "./api/users.js";
-import { handleNewChirp, handleFindChirps } from "./api/chirps.js";
+import {
+    handleFindChirp,
+    handleFindChirps,
+    handleNewChirp,
+} from "./api/chirps.js";
 import { handleReset } from "./api/reset.js";
 import { handleFileserverHits } from "./api/metrics.js";
 import { handleReadiness } from "./api/health.js";
@@ -37,7 +41,9 @@ app.use("/app", middlewareMetricsInc, express.static("./src/app"));
 app.get("/api/healthz", asyncRouteErrorHandler(handleReadiness));
 app.post("/api/users", asyncRouteErrorHandler(handleNewUser));
 app.post("/api/chirps", asyncRouteErrorHandler(handleNewChirp));
+// Route order matters: /chirps must come before /chirps/:id to avoid conflicts
 app.get("/api/chirps", asyncRouteErrorHandler(handleFindChirps));
+app.get("/api/chirps/:chirpId", asyncRouteErrorHandler(handleFindChirp));
 app.get("/admin/metrics", asyncRouteErrorHandler(handleFileserverHits));
 app.post("/admin/reset", asyncRouteErrorHandler(handleReset));
 
