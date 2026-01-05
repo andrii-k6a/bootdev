@@ -15,6 +15,13 @@
       "when": 1767543062177,
       "tag": "0001_grey_mauler",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767615743674,
+      "tag": "0002_salty_kabuki",
+      "breakpoints": true
     }
   ]
 }
