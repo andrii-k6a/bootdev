@@ -4,6 +4,11 @@ import {
     BadRequestError,
     NotFoundError
 } from "./errors.js";
+import { config } from "../config.js";
+import {
+    getBearerToken,
+    validateJWT
+} from "../lib/auth.js";
 import {
     findChirpById,
     findChirps,
@@ -12,7 +17,6 @@ import {
 
 type Parameters = {
     body: string;
-    userId: string;
 }
 
 const MAX_CHIRP_LENGTH = 140;
@@ -21,7 +25,7 @@ const BAD_WORDS = ["kerfuffle", "fornax", "sharbert"];
 function validate(req: Request) {
     let chirp: Parameters = req.body;
 
-    if (!chirp || typeof chirp.body !== "string" || typeof chirp.userId !== "string" || chirp.userId.length !== 36) {
+    if (!chirp || typeof chirp.body !== "string") {
         throw new BadRequestError("Invalid body! Fix it and try again!");
     }
 
@@ -39,7 +43,6 @@ function validate(req: Request) {
         .join(" ");
 
     return {
-        userId: chirp.userId,
         cleanedBody,
     };
 }
@@ -55,11 +58,14 @@ function mapChirp(chirp: Chirp) {
 }
 
 export async function handleNewChirp(req: Request, resp: Response) {
+    const token = getBearerToken(req);
+    const userId = validateJWT(token, config.jwt.secret);
+
     const input = validate(req);
 
     const savedChirp = await saveNewChirp({
         body: input.cleanedBody,
-        userId: input.userId
+        userId,
     });
 
     resp.status(201).json(mapChirp(savedChirp));

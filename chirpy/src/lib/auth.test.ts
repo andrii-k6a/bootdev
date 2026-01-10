@@ -1,10 +1,12 @@
+import type { Request } from "express";
 import { describe, it, expect, beforeAll } from "vitest";
 import { UserNotAuthenticatedError } from "../api/errors.js";
 import {
     hashPassword,
     checkPasswordHash,
     makeJWT,
-    validateJWT
+    validateJWT,
+    getBearerToken
 } from "./auth.js";
 
 describe("Password Hashing", () => {
@@ -71,6 +73,45 @@ describe("JWT Functions", () => {
     it("should reject token with wrong secret", async () => {
         expect(() => validateJWT(jwt, "wrong-secret"))
             .toThrow(UserNotAuthenticatedError);
-    })
+    });
+
+});
+
+describe("Bearer Token", () => {
+    it("should get bearer token", async () => {
+        const mockToken = "mock.jwt.token";
+        const mockRequest = {
+            headers: {
+                authorization: `Bearer ${mockToken}`
+            }
+        } as Request;
+        const token = getBearerToken(mockRequest);
+        expect(token).toBe(mockToken);
+    });
+
+    it("should throw an error if no headers", async () => {
+        const mockRequest = {} as Request;
+        expect(() => getBearerToken(mockRequest))
+            .toThrow("Missing authorization header");
+    });
+
+    it("should throw an error if auth header is missing", async () => {
+        const mockRequest = {
+            headers: {}
+        } as Request;
+        expect(() => getBearerToken(mockRequest))
+            .toThrow("Missing authorization header");
+    });
+
+    it("should throw an error if auth header is invalid", async () => {
+        const mockRequest = {
+            headers: {
+                authorization: "invalid auth header"
+            }
+        } as Request;
+        expect(() => getBearerToken(mockRequest))
+            .toThrow("Invalid authorization header");
+    });
+
 });
 

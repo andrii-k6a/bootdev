@@ -1,11 +1,11 @@
+import type { Request } from "express";
 import type { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
+import { config } from "../config.js";
 import { UserNotAuthenticatedError } from "../api/errors.js";
 
 type Payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
-
-const TOKEN_ISSUER = "chirpy";
 
 export async function hashPassword(password: string) {
     return await argon2.hash(password);
@@ -24,7 +24,7 @@ export function makeJWT(userId: string, expiresIn: number, secret: string): stri
     const issuedAt = Math.floor(Date.now() / 1000);
     const expireAt = issuedAt + expiresIn;
     const payload: Payload = {
-        iss: TOKEN_ISSUER,
+        iss: config.jwt.issuer,
         sub: userId,
         iat: issuedAt,
         exp: expireAt,
@@ -44,7 +44,7 @@ export function validateJWT(tokenString: string, secret: string): string {
         throw new UserNotAuthenticatedError("Token verification failed");
     }
 
-    if (decoded.iss !== TOKEN_ISSUER) {
+    if (decoded.iss !== config.jwt.issuer) {
         throw new UserNotAuthenticatedError("Invalid token issuer");
 
     }
@@ -54,5 +54,17 @@ export function validateJWT(tokenString: string, secret: string): string {
     }
 
     return decoded.sub;
+}
+
+export function getBearerToken(req: Request): string {
+    const authHeader = req.headers?.authorization;
+    if (!authHeader) {
+        throw new UserNotAuthenticatedError("Missing authorization header");
+    }
+    const splitted = authHeader.split(" ");
+    if (splitted.length !== 2 || splitted[0] !== "Bearer") {
+        throw new UserNotAuthenticatedError("Invalid authorization header");
+    }
+    return splitted[1].trim();
 }
 
