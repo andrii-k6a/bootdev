@@ -4,6 +4,7 @@ import { UserNotAuthenticatedError } from "../api/errors.js";
 import {
     hashPassword,
     checkPasswordHash,
+    makeRefreshToken,
     makeJWT,
     validateJWT,
     getBearerToken
@@ -111,6 +112,21 @@ describe("Bearer Token", () => {
         } as Request;
         expect(() => getBearerToken(mockRequest))
             .toThrow("Invalid authorization header");
+    });
+
+});
+
+describe("Refresh Token", () => {
+    it("should return refresh token", async () => {
+        const token = makeRefreshToken();
+        expect(token).toBeDefined();
+        expect(token.length).toBe(64);
+    });
+
+    it("should return unique tokens", async () => {
+        const token1 = makeRefreshToken();
+        const token2 = makeRefreshToken();
+        expect(token1).not.toBe(token2);
     });
 
 });

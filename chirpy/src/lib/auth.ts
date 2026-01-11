@@ -2,6 +2,7 @@ import type { Request } from "express";
 import type { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
+import crypto from "crypto";
 import { config } from "../config.js";
 import { UserNotAuthenticatedError } from "../api/errors.js";
 
@@ -18,6 +19,10 @@ export async function checkPasswordHash(password: string, hash: string) {
     } catch (err) {
         return false;
     }
+}
+
+export function makeRefreshToken() {
+    return crypto.randomBytes(32).toString("hex");
 }
 
 export function makeJWT(userId: string, expiresIn: number, secret: string): string {

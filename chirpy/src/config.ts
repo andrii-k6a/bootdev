@@ -13,7 +13,8 @@ export type DBConfig = {
 };
 
 export type JWTConfig = {
-    defaultExpirationTimeSeconds: number;
+    accessTokenExpirationTimeout: number;
+    refreshTokenExpirationTimeout: number;
     secret: string;
     issuer: string;
 };
@@ -55,7 +56,8 @@ export const config: Config = {
         migrationConfig
     },
     jwt: {
-        defaultExpirationTimeSeconds: 3600,
+        accessTokenExpirationTimeout: 60 * 60, // 1 hour in seconds
+        refreshTokenExpirationTimeout: 60 * 60 * 24 * 60 * 1000, // 60 days in millis
         secret: envOrThrow("JWT_SECRET"),
         issuer: "chirpy",
     },
