@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import type { Chirp } from "../lib/db/schema.js";
 import {
     BadRequestError,
+    ForbiddenError,
     NotFoundError
 } from "./errors.js";
 import { config } from "../config.js";
@@ -12,7 +13,8 @@ import {
 import {
     findChirpById,
     findChirps,
-    saveNewChirp
+    saveNewChirp,
+    deleteChirp,
 } from "../lib/db/queries/chirps.js";
 
 type Parameters = {
@@ -79,6 +81,7 @@ export async function handleFindChirps(req: Request, resp: Response) {
 export async function handleFindChirp(req: Request, resp: Response) {
     const { chirpId } = req.params;
 
+    // TODO add id validation - if it is not a valid uuid the request fails with 500 status
     const chirp = await findChirpById(chirpId);
 
     if (!chirp) {
@@ -86,5 +89,30 @@ export async function handleFindChirp(req: Request, resp: Response) {
     }
 
     resp.status(200).json(mapChirp(chirp));
+}
+
+export async function handleChirpDelete(req: Request, resp: Response) {
+    const token = getBearerToken(req);
+    const userId = validateJWT(token, config.jwt.secret);
+
+    const { chirpId } = req.params;
+
+    // TODO add id validation - if it is not a valid uuid the request fails with 500 status
+    const chirp = await findChirpById(chirpId);
+
+    if (!chirp) {
+        throw new NotFoundError(`Chirp not found by id ${chirpId}`);
+    }
+
+    if (chirp.userId !== userId) {
+        throw new ForbiddenError("You are not allowed to delete the chirp");
+    }
+
+    const deleted = await deleteChirp(chirp.id);
+    if (!deleted) {
+        throw new Error(`Failed to delete chirp by id ${chirpId}`);
+    }
+
+    resp.status(204).send();
 }
 

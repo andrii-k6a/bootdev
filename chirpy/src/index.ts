@@ -15,6 +15,7 @@ import {
     handleFindChirp,
     handleFindChirps,
     handleNewChirp,
+    handleChirpDelete,
 } from "./api/chirps.js";
 import { handleReset } from "./api/reset.js";
 import { handleFileserverHits } from "./api/metrics.js";
@@ -53,6 +54,7 @@ app.post("/api/chirps", asyncRouteErrorHandler(handleNewChirp));
 // Route order matters: /chirps must come before /chirps/:id to avoid conflicts
 app.get("/api/chirps", asyncRouteErrorHandler(handleFindChirps));
 app.get("/api/chirps/:chirpId", asyncRouteErrorHandler(handleFindChirp));
+app.delete("/api/chirps/:chirpId", asyncRouteErrorHandler(handleChirpDelete));
 app.get("/admin/metrics", asyncRouteErrorHandler(handleFileserverHits));
 app.post("/admin/reset", asyncRouteErrorHandler(handleReset));
 

@@ -23,3 +23,10 @@ export async function saveNewChirp(newChirp: NewChirp) {
     return result;
 }
 
+export async function deleteChirp(chirpId: string) {
+    const [result] = await db.delete(chirps)
+        .where(eq(chirps.id, chirpId))
+        .returning();
+    return result;
+}
+
