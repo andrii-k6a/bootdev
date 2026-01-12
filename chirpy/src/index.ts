@@ -10,7 +10,7 @@ import {
     handleRefresh,
     handleRevoke,
 } from "./api/auth.js";
-import { handleNewUser } from "./api/users.js";
+import { handleNewUser, handleCredentialsUpdate } from "./api/users.js";
 import {
     handleFindChirp,
     handleFindChirps,
@@ -48,6 +48,7 @@ app.post("/api/login", asyncRouteErrorHandler(handleLogin));
 app.post("/api/refresh", asyncRouteErrorHandler(handleRefresh));
 app.post("/api/revoke", asyncRouteErrorHandler(handleRevoke));
 app.post("/api/users", asyncRouteErrorHandler(handleNewUser));
+app.put("/api/users", asyncRouteErrorHandler(handleCredentialsUpdate));
 app.post("/api/chirps", asyncRouteErrorHandler(handleNewChirp));
 // Route order matters: /chirps must come before /chirps/:id to avoid conflicts
 app.get("/api/chirps", asyncRouteErrorHandler(handleFindChirps));

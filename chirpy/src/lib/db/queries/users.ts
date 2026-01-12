@@ -18,6 +18,14 @@ export async function createUser(user: NewUser) {
     return result;
 }
 
+export async function updateCredentials(userId: string, email: string, hashedPassword: string) {
+    const [result] = await db.update(users)
+        .set({ email, hashedPassword })
+        .where(eq(users.id, userId))
+        .returning();
+    return result;
+}
+
 export async function deleteAllUsers() {
     return await db.delete(users)
         .returning();
