@@ -39,6 +39,7 @@ function toResponse(user: User, accessToken: string, refreshToken: string): Logi
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
         email: user.email,
+        isChirpyRed: user.isChirpyRed,
         token: accessToken,
         refreshToken,
     };

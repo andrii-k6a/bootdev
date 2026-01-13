@@ -11,6 +11,7 @@ import {
     handleRevoke,
 } from "./api/auth.js";
 import { handleNewUser, handleCredentialsUpdate } from "./api/users.js";
+import { handleChirpyRedUpgrade } from "./api/payments.js";
 import {
     handleFindChirp,
     handleFindChirps,
@@ -55,6 +56,7 @@ app.post("/api/chirps", asyncRouteErrorHandler(handleNewChirp));
 app.get("/api/chirps", asyncRouteErrorHandler(handleFindChirps));
 app.get("/api/chirps/:chirpId", asyncRouteErrorHandler(handleFindChirp));
 app.delete("/api/chirps/:chirpId", asyncRouteErrorHandler(handleChirpDelete));
+app.post("/api/polka/webhooks", asyncRouteErrorHandler(handleChirpyRedUpgrade));
 app.get("/admin/metrics", asyncRouteErrorHandler(handleFileserverHits));
 app.post("/admin/reset", asyncRouteErrorHandler(handleReset));
 

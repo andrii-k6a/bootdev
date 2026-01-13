@@ -26,6 +26,14 @@ export async function updateCredentials(userId: string, email: string, hashedPas
     return result;
 }
 
+export async function updateChirpyRed(userId: string, chirpyRedEnabled: boolean) {
+    const [result] = await db.update(users)
+        .set({ isChirpyRed: chirpyRedEnabled })
+        .where(eq(users.id, userId))
+        .returning();
+    return result;
+}
+
 export async function deleteAllUsers() {
     return await db.delete(users)
         .returning();
