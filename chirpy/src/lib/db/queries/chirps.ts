@@ -9,6 +9,13 @@ export async function findChirps() {
         .orderBy(chirps.createdAt);
 }
 
+export async function findChirpsByAuthorId(authorId: string) {
+    return await db.select()
+        .from(chirps)
+        .where(eq(chirps.userId, authorId))
+        .orderBy(chirps.createdAt);
+}
+
 export async function findChirpById(id: string) {
     const [result] = await db.select()
         .from(chirps)
