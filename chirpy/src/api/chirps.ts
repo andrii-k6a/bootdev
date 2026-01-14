@@ -75,6 +75,16 @@ export async function handleNewChirp(req: Request, resp: Response) {
 }
 
 export async function handleFindChirps(req: Request, resp: Response) {
+    const sort = req.query.sort;
+    if (typeof sort === "string" && sort !== "asc" && sort !== "desc") {
+        throw new BadRequestError("Invaild sort value. Valid values are asc or desc");
+    }
+
+    let ascOrder = true;
+    if (sort === "desc") {
+        ascOrder = false;
+    }
+
     let authorId = undefined;
     // TODO add id validation - if it is not a valid uuid the request fails with 500 status
     if (typeof req.query.authorId === "string") {
@@ -83,9 +93,9 @@ export async function handleFindChirps(req: Request, resp: Response) {
 
     let chirps;
     if (authorId) {
-        chirps = (await findChirpsByAuthorId(authorId)).map(c => mapChirp(c));
+        chirps = (await findChirpsByAuthorId(authorId, ascOrder)).map(c => mapChirp(c));
     } else {
-        chirps = (await findChirps()).map(c => mapChirp(c));
+        chirps = (await findChirps(ascOrder)).map(c => mapChirp(c));
     }
 
     resp.status(200).json(chirps);
