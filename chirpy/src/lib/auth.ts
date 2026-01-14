@@ -62,12 +62,20 @@ export function validateJWT(tokenString: string, secret: string): string {
 }
 
 export function getBearerToken(req: Request): string {
+    return getToken(req, "Bearer");
+}
+
+export function getAPIKey(req: Request): string {
+    return getToken(req, "ApiKey");
+}
+
+function getToken(req: Request, type: string) {
     const authHeader = req.headers?.authorization;
     if (!authHeader) {
         throw new UserNotAuthenticatedError("Missing authorization header");
     }
     const splitted = authHeader.split(" ");
-    if (splitted.length !== 2 || splitted[0] !== "Bearer") {
+    if (splitted.length !== 2 || splitted[0] !== type) {
         throw new UserNotAuthenticatedError("Invalid authorization header");
     }
     return splitted[1].trim();

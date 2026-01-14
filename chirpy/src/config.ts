@@ -23,6 +23,9 @@ export type Config = {
     api: APIConfig;
     db: DBConfig;
     jwt: JWTConfig;
+    polka: {
+        apiKey: string;
+    }
 };
 
 function envOrThrow(key: string): string {
@@ -60,6 +63,9 @@ export const config: Config = {
         refreshTokenExpirationTimeout: 60 * 60 * 24 * 60 * 1000, // 60 days in millis
         secret: envOrThrow("JWT_SECRET"),
         issuer: "chirpy",
+    },
+    polka: {
+        apiKey: envOrThrow("POLKA_KEY"),
     },
 };
 
